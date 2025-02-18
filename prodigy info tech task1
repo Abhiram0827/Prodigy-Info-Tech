@@ -1,35 +1,41 @@
-Bar Chart (Top 20 Most Populated Countries in 2023)
-import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
 
-# Load the dataset
-df = pd.read_csv("API_SP.POP.TOTL_DS2_en_csv_v2_87.csv", skiprows=4)
+# Sample aggregated data based on the insights
+data = {
+    'Discipline': ['Engineering'],
+    'Male_Students': [66],  # Percentage
+    'Female_Students': [34]  # Percentage
+}
 
-# Select relevant columns
-df_population_2023 = df[['Country Name', '2023']].dropna()
+# Create DataFrame
+df = pd.DataFrame(data)
 
-# Convert population to numeric
-df_population_2023['2023'] = pd.to_numeric(df_population_2023['2023'], errors='coerce')
+# Melt the DataFrame for easier plotting
+df_melted = df.melt(id_vars='Discipline', var_name='Gender', value_name='Percentage')
 
-# Sort and select top 20 most populated countries
-df_top20 = df_population_2023.sort_values(by='2023', ascending=False).head(20)
-
-# Create bar chart
-plt.figure(figsize=(12, 6))
-plt.barh(df_top20['Country Name'], df_top20['2023'], color='skyblue')
-plt.xlabel("Population (in billions)")
-plt.ylabel("Country")
-plt.title("Top 20 Most Populated Countries in 2023")
-plt.gca().invert_yaxis()  # Invert y-axis for readability
-plt.grid(axis='x', linestyle='--', alpha=0.7)
+# Plotting
+plt.figure(figsize=(8, 6))
+sns.barplot(x='Discipline', y='Percentage', hue='Gender', data=df_melted, palette='pastel')
+plt.title('Gender Distribution in Engineering Discipline in India')
+plt.ylabel('Percentage')
+plt.xlabel('Discipline')
+plt.ylim(0, 100)
 plt.show()
-Histogram (Population Distribution in 2023)
-# Create histogram
-plt.figure(figsize=(10, 6))
-plt.hist(df_population_2023['2023'], bins=30, color='skyblue', edgecolor='black', alpha=0.7)
-plt.xlabel("Population")
-plt.ylabel("Frequency")
-plt.title("Population Distribution Across Countries in 2023")
-plt.grid(axis='y', linestyle='--', alpha=0.7)
-plt.show()
+import numpy as np
 
+# Generate synthetic age data
+np.random.seed(42)
+ages = np.random.randint(18, 24, 1000)  # 1000 students aged between 18 and 23
+
+# Create DataFrame
+df_ages = pd.DataFrame({'Age': ages})
+
+# Plotting
+plt.figure(figsize=(8, 6))
+sns.histplot(df_ages['Age'], bins=6, kde=True, color='skyblue')
+plt.title('Synthetic Age Distribution of BTech Students in India')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.show()
